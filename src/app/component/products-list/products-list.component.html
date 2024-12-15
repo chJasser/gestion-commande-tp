@@ -1,0 +1,131 @@
+<!-- Category Selection -->
+<div class="form-group">
+  <label for="exampleFormControlSelect1" class="text-primary font-weight-bold">Sélectionner une catégorie</label>
+  <select class="form-control" id="exampleFormControlSelect1" [(ngModel)]="selectedCategory" (change)="onProductChange($event)">
+    <option value="All" selected>Toutes les catégories</option>
+    <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+  </select>
+</div>
+
+<!-- Success Message -->
+<div *ngIf="isPurshased">
+  <div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Bien joué !</h4>
+    <p>Vous avez acheté le produit avec succès</p>
+    <hr>
+    <p class="mb-0">Merci de faire vos achats chez nous</p>
+  </div>
+</div>
+
+<!-- Product Display Section -->
+<div class="row">
+  <div *ngFor="let item of productsFiltered; trackBy: trackItem" class="col-12 col-md-4 p-2 my-2">
+    <div class="card shadow-sm" style="height: 100%" [ngClass]="{ 'bg-warning': item.quantity == 1, 'bg-light': item.quantity > 0 }">
+      
+      <!-- Product Image -->
+      <div *ngIf="showImgs" class="card-img-top-container">
+        <img [src]="item.img" class="card-img-top " alt="Product image" />
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body">
+        <h3 class="card-title text-center text-primary">{{item.name}}</h3>
+        <h4 class="card-text text-center text-muted">
+          ID de la catégorie : {{item.categoryId}}
+        </h4>
+        <p class="card-text text-dark">{{item.description}}</p>
+
+        <!-- Pricing Section -->
+        <div class="d-flex justify-content-between align-items-center">
+          <p class="card-text">
+            <span class="text-danger" style="text-decoration: line-through;">{{item.price | currency: 'TND'}}</span>
+            <span *ngIf="item.discount !== 'No Discount'" class="text-success">
+              {{item.price | calcDiscount: +item.discount | currency: 'TND'}}
+            </span>
+            <span *ngIf="item.discount === 'No Discount'" class="text-success">
+              {{item.price | currency: 'TND'}}
+            </span>
+          </p>
+          
+          <!-- Stock Availability -->
+          <p class="card-text">
+            Quantité : {{item.quantity}} article(s) en stock
+            <span class="badge" [ngClass]="{
+                'bg-danger': item.quantity == 1, 
+                'bg-warning': item.quantity == 2,
+                'bg-secondary': item.quantity > 2
+              }">
+              {{item.quantity == 1 ? 'Dernier article' : (item.quantity == 2 ? 'Les deux derniers articles' : 'En stock')}}
+            </span>
+          </p>
+
+          <!-- Discount Info -->
+          <p *ngIf="item.discount !== 'No Discount'" class="card-text text-danger">
+            Remise : {{item.discount}}%
+          </p>
+        </div>
+
+        <!-- Buttons Section -->
+        <div class="d-grid gap-2">
+          <button class="btn btn-success" [disabled]="item.quantity == 0" (click)="buyProduct(item)">
+            <i class="fas fa-cart-plus"></i> Ajouter au panier
+          </button>
+          <button class="btn btn-info" (click)="goToProductDetails(item.id)">
+            Voir plus de détails
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Products Found -->
+  <div *ngIf="!productsFiltered.length" class="col-12 text-center text-primary">
+    <p>Aucun produit trouvé</p>
+  </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+  .card {
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .card-img-top-container {
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .card-img-top {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+  .badge {
+    font-size: 0.85em;
+    padding: 5px 10px;
+  }
+
+  .alert {
+    font-size: 1.1em;
+  }
+
+  .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+
+  .btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+  }
+
+  .btn-success:hover, .btn-info:hover {
+    background-color: #218838;
+    border-color: #218838;
+  }
+</style>

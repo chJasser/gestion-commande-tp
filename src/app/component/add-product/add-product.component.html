@@ -1,0 +1,132 @@
+<h1 class="text-center mb-4">Add Product</h1>
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="card mt-2 mx-auto p-4 bg-light shadow-sm">
+      <div class="card-body bg-light">
+
+        <div class="container">
+          <form id="contact-form" (ngSubmit)="addProduct()" role="form" #productForm="ngForm">
+            
+            <!-- Success Message -->
+            <div *ngIf="successMessage" class="alert alert-success text-center mb-3">
+              <strong>Success!</strong> {{ successMessage }}
+            </div>
+            
+            <div class="controls">
+
+              <!-- Name, Description, and Category -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="form_name" class="form-label">Product Name *</label>
+                    <input id="form_name" type="text" name="name" class="form-control"
+                      placeholder="Enter product name" [(ngModel)]="product.name" #productName="ngModel"
+                      [class.is-invalid]="productName.invalid && productName.touched" minlength="3" maxlength="15" required>
+                    <div *ngIf="productName.invalid && productName.touched" class="invalid-feedback">
+                      <div *ngIf="productName.errors?.['required']">Name is required.</div>
+                      <div *ngIf="productName.errors?.['minlength']">Name must be at least 3 characters long.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="description" class="form-label">Description *</label>
+                    <input id="description" type="text" name="description" class="form-control"
+                      placeholder="Enter description" [(ngModel)]="product.description" #description="ngModel"
+                      [class.is-invalid]="description.invalid && description.touched" minlength="3" maxlength="15" required>
+                    <div *ngIf="description.invalid && description.touched" class="invalid-feedback">
+                      <div *ngIf="description.errors?.['required']">Description is required.</div>
+                      <div *ngIf="description.errors?.['minlength']">Description must be at least 3 characters long.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Category, Material, and Price -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="form_need" class="form-label">Category *</label>
+                    <select id="form_need" name="category" class="form-control" [(ngModel)]="product.categoryId" required>
+                      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="form_material" class="form-label">Material *</label>
+                    <select id="form_material" name="material" class="form-control" [(ngModel)]="product.material" required>
+                      <option *ngFor="let material of materials" [value]="material.name">{{ material.name }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Price, Quantity -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="form_price" class="form-label">Price *</label>
+                    <input id="form_price" type="number" name="price" class="form-control"
+                      placeholder="Enter price" [(ngModel)]="product.price" required min="100" max="100000" #productPrice="ngModel">
+                    <div *ngIf="productPrice.invalid && productPrice.touched" class="invalid-feedback">
+                      <div *ngIf="productPrice.errors?.['required']">Price is required.</div>
+                      <div *ngIf="productPrice.errors?.['min']">Price must be at least 100.</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="form_quantity" class="form-label">Quantity *</label>
+                    <input id="form_quantity" type="number" name="quantity" class="form-control"
+                      placeholder="Enter quantity" [(ngModel)]="product.quantity" required min="1" max="99" #quantity="ngModel">
+                    <div *ngIf="quantity.invalid && quantity.touched" class="invalid-feedback">
+                      <div *ngIf="quantity.errors?.['required']">Quantity is required.</div>
+                      <div *ngIf="quantity.errors?.['min']">Quantity must be between 1 and 99.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Discount and Image Source -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="form_discount" class="form-label">Discount</label>
+                    <select id="form_discount" name="discount" class="form-control" [(ngModel)]="product.discount">
+                      <option value="No Discount" selected>No Discount</option>
+                      <option value="10">10%</option>
+                      <option value="15">15%</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="form_img_src" class="form-label">Image URL *</label>
+                    <input id="form_img_src" type="text" name="img" class="form-control"
+                      placeholder="Enter image URL" [(ngModel)]="product.img" required pattern="https?://.+" #img="ngModel">
+                    <div *ngIf="img.invalid && img.touched" class="invalid-feedback">
+                      <div *ngIf="img.errors?.['required']">Image URL is required.</div>
+                      <div *ngIf="img.errors?.['pattern']">Valid image URL is required.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="row">
+                <div class="col-md-12 text-center mt-3">
+                  <button type="submit" class="btn btn-primary btn-block text-center" [disabled]="productForm.invalid">Add Product</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
